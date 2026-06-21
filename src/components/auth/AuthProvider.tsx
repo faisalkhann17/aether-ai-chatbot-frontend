@@ -4,6 +4,7 @@
 // Initializes Supabase session on mount and syncs to global store
 
 import { useEffect, useRef } from "react";
+import type { Session } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
 import { useAuthStore, useConversationStore } from "@/lib/store";
 
@@ -16,7 +17,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // *different* user) — not on every token refresh for the same user.
   const previousUserId = useRef<string | null | undefined>(undefined);
 
-  const handleSession = (session: { user: { id: string } | null; access_token: string } | null) => {
+  const handleSession = (session: Session | null) => {
     const nextUserId = session?.user?.id ?? null;
 
     if (previousUserId.current !== undefined && previousUserId.current !== nextUserId) {
